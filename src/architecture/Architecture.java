@@ -1102,7 +1102,6 @@ public class Architecture {
 	}
 
 	public void subImmReg() {
-
 		// --- LER IMEDIATO ---
 		PC.internalRead();
 		ula.store(1);
