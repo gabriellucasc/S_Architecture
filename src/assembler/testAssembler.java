@@ -43,7 +43,7 @@ public class testAssembler {
 		Assembler ass = new Assembler();
 		String commandLine[] = new String[3];
 		ArrayList<String> returnedObj = new ArrayList<>();
-		
+
 		//first test: add
 		commandLine[0] = "add";
 		commandLine[1] = "variable";
@@ -54,7 +54,7 @@ public class testAssembler {
 		assertEquals("&variable", ass.getObjProgram().get(1));
 		assertEquals("%RPG0", ass.getObjProgram().get(2));
 		assertEquals(3, ass.getObjProgram().size()); //only two lines: the command and the address
-		
+
 		//second test: sub
 		returnedObj = new ArrayList<>();
 		ass = new Assembler();
@@ -67,7 +67,7 @@ public class testAssembler {
 		assertEquals("%RPG0", ass.getObjProgram().get(1));
 		assertEquals("%RPG1", ass.getObjProgram().get(2));
 		assertEquals(3, ass.getObjProgram().size()); //only two lines: the command and the address
-		
+
 		//third test: jmp
 		returnedObj = new ArrayList<>();
 		ass = new Assembler();
@@ -78,7 +78,7 @@ public class testAssembler {
 		assertEquals("15", returnedObj.get(0)); //the add code is 0
 		assertEquals("&label", ass.getObjProgram().get(1));
 		assertEquals(2, ass.getObjProgram().size()); //only two lines: the command and the address
-		
+
 		//fourth test: jz
 		returnedObj = new ArrayList<>();
 		ass = new Assembler();
@@ -89,7 +89,7 @@ public class testAssembler {
 		assertEquals("17", returnedObj.get(0)); //the add code is 0
 		assertEquals("&label", ass.getObjProgram().get(1));
 		assertEquals(2, ass.getObjProgram().size()); //only two lines: the command and the address
-		
+
 		//fifth test: jn
 		returnedObj = new ArrayList<>();
 		ass = new Assembler();
@@ -149,8 +149,8 @@ public class testAssembler {
 		assertEquals("&address", ass.getObjProgram().get(1));
 		assertEquals(2, ass.getObjProgram().size()); //only one lines: the command and no parameters
 
-		
-		
+
+
 		//tenth test: move %regA %regB
 		returnedObj = new ArrayList<>();
 		ass = new Assembler();
@@ -163,7 +163,7 @@ public class testAssembler {
 		assertEquals("%RPG0", ass.getObjProgram().get(1));
 		assertEquals("%RPG1", ass.getObjProgram().get(2));
 		assertEquals(3, ass.getObjProgram().size()); //only two lines: the command and the address
-		
+
 		//final test: a small program
 		//testing the following lines
 		//sub adr1
@@ -212,24 +212,24 @@ public class testAssembler {
 		//now, getting the object program
 		returnedObj = ass.getObjProgram();
 		assertEquals(15, returnedObj.size()); //the object program must have 16 lines
-		
+
 		assertEquals("3", returnedObj.get(0)); //the code of sub is 1
 		assertEquals("%RPG0", returnedObj.get(1)); //the parameter
 		assertEquals("%RPG1", returnedObj.get(2)); //the parameter
-		
+
 		assertEquals("1", returnedObj.get(3)); //the code of add is 0
 		assertEquals("&variable", returnedObj.get(4)); //the parameter
 		assertEquals("%RPG1", returnedObj.get(5)); //the parameter
-		
+
 		assertEquals("15", returnedObj.get(6)); //the code of jmp is 2
 		assertEquals("&label1", returnedObj.get(7)); //the parameter
-		
+
 		assertEquals("14", returnedObj.get(8)); //the code of inc is 8
 		assertEquals("&address", returnedObj.get(9)); //the parameter
-		
+
 		assertEquals("16", returnedObj.get(10)); //the code of jn is 4
 		assertEquals("&label2", returnedObj.get(11)); //the paramete
-		
+
 		assertEquals("11", returnedObj.get(12)); //the code of moveRegReg is 9
 		assertEquals("%RPG0", returnedObj.get(13)); //the parameter
 		assertEquals("%RPG1", returnedObj.get(14)); //the parameter
@@ -240,7 +240,7 @@ public class testAssembler {
 		Assembler ass = new Assembler();
 		ArrayList<String> returnedObj = new ArrayList<>();
 		ArrayList<String> sourceProgram = new ArrayList<>();
-		
+
 		//inserting the following program
 		/*
 		 * var1
@@ -278,7 +278,7 @@ public class testAssembler {
 		sourceProgram.add("jn label");
 		*/
 
-				//inserting the following program
+		//inserting the following program
 		/*
 		 * var1
 		 * var2
@@ -313,63 +313,63 @@ public class testAssembler {
 		sourceProgram.add("move %RPG1 %RPG0");
 		sourceProgram.add("sub var3 %RPG0");
 		sourceProgram.add("jn label");
-		
+
 		//now we can generate the object program
 		ass.setLines(sourceProgram);
 		ass.parse();
 		returnedObj = ass.getObjProgram();
-		
+
 		//testing
 		assertEquals(35, returnedObj.size());
-		
+
 		//checking line by line
 		assertEquals("12", returnedObj.get(0)); //the code of ldi is 7
 		assertEquals("10", returnedObj.get(1)); //the parameter
 		assertEquals("%RPG0", returnedObj.get(2)); //the parameter
-		
+
 		assertEquals("10", returnedObj.get(3)); //the code of store is 6
 		assertEquals("%RPG0", returnedObj.get(4)); //the parameter
 		assertEquals("&var3", returnedObj.get(5)); //the parameter
-		
+
 		assertEquals("12", returnedObj.get(6)); //the code of ldi is 7
 		assertEquals("2", returnedObj.get(7)); //the parameter
 		assertEquals("%RPG0", returnedObj.get(8)); //the parameter
-		
+
 		assertEquals("10", returnedObj.get(9)); //the code of store is 6
 		assertEquals("%RPG0", returnedObj.get(10)); //the parameter
 		assertEquals("&var2", returnedObj.get(11)); //the parameter
-		
+
 		assertEquals("12", returnedObj.get(12)); //the code of ldi is 7
 		assertEquals("0", returnedObj.get(13)); //the parameter
 		assertEquals("%RPG0", returnedObj.get(14)); //the parameter
-		
+
 		assertEquals("10", returnedObj.get(15)); //the code of store is 6
 		assertEquals("%RPG0", returnedObj.get(16)); //the parameter
 		assertEquals("&var1", returnedObj.get(17)); //the parameter
-		
+
 		assertEquals("9", returnedObj.get(18)); //the code of read is 5
 		assertEquals("&var1", returnedObj.get(19)); //the parameter
 		assertEquals("%RPG0", returnedObj.get(20)); //the parameter
-		
+
 		assertEquals("1", returnedObj.get(21)); //the code of add is 0
 		assertEquals("&var2", returnedObj.get(22)); //the parameter
 		assertEquals("%RPG0", returnedObj.get(23)); //the parameter
-		
+
 		assertEquals("10", returnedObj.get(24)); //the code of store is 6
 		assertEquals("%RPG0", returnedObj.get(25)); //the parameter
 		assertEquals("&var1", returnedObj.get(26)); //the parameter
-		
+
 		assertEquals("11", returnedObj.get(27)); //the code of moveRegReg is 9
 		assertEquals("%RPG1", returnedObj.get(28)); //the parameter
 		assertEquals("%RPG0", returnedObj.get(29)); //the parameter
-		
+
 		assertEquals("4", returnedObj.get(30)); //the code of sub is 1
 		assertEquals("&var3", returnedObj.get(31)); //the parameter
 		assertEquals("%RPG0", returnedObj.get(32)); //the parameter
-		
+
 		assertEquals("16", returnedObj.get(33)); //the code of jn is 4
 		assertEquals("&label", returnedObj.get(34)); //the parameter
-		
+
 		//now, checking if the label "label" was inserted, pointing to the position 12
 		//the line 'read var1' is just after the label
 		//once the command was inserted in the position 12, the label must 
@@ -379,7 +379,7 @@ public class testAssembler {
 		assertEquals(1, ass.getLabelsAddresses().size());
 		assertEquals(0, ass.getLabels().indexOf("label"));
 		assertEquals(18, (int) ass.getLabelsAddresses().get(0));
-		
+
 		//checking if all variables are stored in variables collection
 		assertEquals("var1", ass.getVariables().get(0));
 		assertEquals("var2", ass.getVariables().get(1));
@@ -388,10 +388,10 @@ public class testAssembler {
 
 	@Test
 	public void testReplaceVariable() {
-		
+
 		Assembler ass = new Assembler();
 		ArrayList<String> sampleexec = new ArrayList<>();
-		
+
 		//creating a fictional exec program with some variables
 		sampleexec.add("9");
 		sampleexec.add("&var1"); //var1 in the position 1
@@ -408,39 +408,39 @@ public class testAssembler {
 		sampleexec.add("&var3"); //var3 in the position 12
 		sampleexec.add("9");
 		sampleexec.add("&var1"); //var1 in the position 14
-		
+
 		//inserting this arraylist into the execprogram collections
 		ass.setExecProgram(sampleexec);
-		
+
 		//now the test!
 		//var1 must be replaced by position 100
 		//var2 must be replaced by  position 99
 		//var2 must be replaced by  position 98
-		
+
 		ass.replaceVariable("var1", 100);
 		ass.replaceVariable("var2", 99);
 		ass.replaceVariable("var3", 98);
-		
+
 		//getting the positions 
 		//var1 is now the address 100. It must be found in positions 1, 7 and 14 
 		assertEquals("100", ass.getExecProgram().get(1));
 		assertEquals("100", ass.getExecProgram().get(7));
 		assertEquals("100", ass.getExecProgram().get(14));
-		
+
 		//var2 is now the address 99. It must be found in positions 5 
 		assertEquals("99", ass.getExecProgram().get(5));
-		
+
 		//var3 is now the address 98. It must be found in positions 10 and 12
 		assertEquals("98", ass.getExecProgram().get(10));
 		assertEquals("98", ass.getExecProgram().get(12));
-		
+
 	}
-	
+
 	@Test
 	public void testReplaceLabels() {
 		Assembler ass = new Assembler();
 		ArrayList<String> sampleexec = new ArrayList<>();
-		
+
 		//creating a fictional exec program with some labels
 		sampleexec.add("9");
 		sampleexec.add("&label1"); //label1 in the position 1
@@ -467,22 +467,22 @@ public class testAssembler {
 		ass.getLabelsAddresses().add(17); //label 1 means position 17
 		ass.getLabelsAddresses().add(42); //label 1 means position 42
 		ass.getLabelsAddresses().add(63); //label 1 means position 63
-		
-		
+
+
 		//inserting this arraylist we made above into the execprogram collections
 		ass.setExecProgram(sampleexec);
-		
-		
+
+
 		//now the test!
 		ass.replaceLabels();
 		//label1 (now refering to position 17) in positions 10 and 12
 		assertEquals("17", ass.getExecProgram().get(1));
 		assertEquals("17", ass.getExecProgram().get(7));
 		assertEquals("17", ass.getExecProgram().get(14));
-		
+
 		//label2 (now refering to position 42) in positions 5
 		assertEquals("42", ass.getExecProgram().get(5));
-		
+
 		//label3 (now refering to position 63) in positions 1, 7 and 14
 		assertEquals("63", ass.getExecProgram().get(10));
 		assertEquals("63", ass.getExecProgram().get(12));
@@ -492,7 +492,7 @@ public class testAssembler {
 	public void testReplaceAllVariables() {
 		Assembler ass = new Assembler();
 		ArrayList<String> sampleexec = new ArrayList<>();
-		
+
 		//creating a fictional exec program with some variables
 		sampleexec.add("9");
 		sampleexec.add("&var1"); //var1 in the position 1
@@ -509,15 +509,15 @@ public class testAssembler {
 		sampleexec.add("&var3"); //var3 in the position 12
 		sampleexec.add("9");
 		sampleexec.add("&var1"); //var1 in the position 14
-		
+
 		//inserting this arraylist into the execprogram collections
 		ass.setExecProgram(sampleexec);
-		
+
 		//now inserting variables
 		ass.getVariables().add("var1");
 		ass.getVariables().add("var2");
 		ass.getVariables().add("var3");
-		
+
 		//in this architecture, the memory size is 128
 		//so, var1 must be replaced by 127, var2 by 126 and var3 by 125
 		ass.replaceAllVariables();
@@ -525,164 +525,166 @@ public class testAssembler {
 		assertEquals("135", ass.getExecProgram().get(1));
 		assertEquals("135", ass.getExecProgram().get(7));
 		assertEquals("135", ass.getExecProgram().get(14));
-		
+
 		//var2 (now 126) is in line 5
 		assertEquals("134", ass.getExecProgram().get(5));
-		
+
 		//var3 (now 125) is in lines 10 and 12
 		assertEquals("133", ass.getExecProgram().get(10));
 		assertEquals("133", ass.getExecProgram().get(12));
 	}
-	
+
 	@Test
 	public void testReplaceRegisters() {
-		
+
 		Assembler ass = new Assembler();
 		ArrayList<String> sampleexec = new ArrayList<>();
-		
-		//creating a fictional exec program with some registers
-		sampleexec.add("9");
-		sampleexec.add("%RPG1"); //rpg1 in the position 1
-		sampleexec.add("9");
-		sampleexec.add("9");
-		sampleexec.add("%PC"); //pc is in position 4
-		sampleexec.add("6");
-		sampleexec.add("%RPG0"); //rpg0 is in position 6
-		sampleexec.add("9");
-		sampleexec.add("9");
-		sampleexec.add("%IR"); //ir in the position 9
-		sampleexec.add("9");
-		sampleexec.add("%RPG0"); //rpg0 in the position 11
-		sampleexec.add("9");
-		sampleexec.add("%RPG1"); //rpg1 in the position 13
-		
-		//inserting this arraylist into the execprogram collections
+
+		/*
+		 * Programa fictício misturando opcodes e operandos reais.
+		 * Registradores prefixados com % devem ser substituídos por seus ids.
+		 */
+
+		sampleexec.add("9");              // 0
+		sampleexec.add("%REG1");          // 1 → 1
+		sampleexec.add("42");             // 2
+		sampleexec.add("%PC");            // 3 → 4
+		sampleexec.add("%REG0");          // 4 → 0
+		sampleexec.add("13");             // 5
+		sampleexec.add("%REG3");          // 6 → 3
+		sampleexec.add("%IR");            // 7 → 5
+		sampleexec.add("99");             // 8
+		sampleexec.add("%Flags");         // 9 → 6
+		sampleexec.add("%StackTop");      // 10 → 7
+		sampleexec.add("%StackBottom");   // 11 → 8
+		sampleexec.add("%REG2");          // 12 → 2
+		sampleexec.add("%REG0");          // 13 → 0 (segunda ocorrência)
+		sampleexec.add("7");              // 14
+
 		ass.setExecProgram(sampleexec);
-		
-		//now the test!
-		//RPG0 must be replaced by 0 
-		//RPG1 must be replaced by 1
-		//PC must be replaced by 2
-		//IR must be replaced by 3
-		
+
+		// ação
 		ass.replaceRegisters();
-		
-		//getting the positions 
-		//rpg0 is now the number 0. It must be found in positions 6 and 11
-		assertEquals("0", ass.getExecProgram().get(6));
-		assertEquals("0", ass.getExecProgram().get(11));
-		
-		//rpg1 is now the number 1. It must be found in positions 1 and 13 
-		assertEquals("1", ass.getExecProgram().get(1));
-		assertEquals("1", ass.getExecProgram().get(13));
-		
-		//pc is now the number 2. It must be found in position 4 
-		assertEquals("2", ass.getExecProgram().get(4));
 
-		//ir is now the number 3. It must be found in position 9 
-		assertEquals("3", ass.getExecProgram().get(9));
-		
+		ArrayList<String> out = ass.getExecProgram();
 
-		
+		// --- testes (verificação dos registradores) ---
+		assertEquals("1", out.get(1));    // REG1 → 1
+		assertEquals("4", out.get(3));    // PC   → 4
+		assertEquals("0", out.get(4));    // REG0 → 0
+		assertEquals("3", out.get(6));    // REG3 → 3
+		assertEquals("5", out.get(7));    // IR   → 5
+		assertEquals("6", out.get(9));    // Flags → 6
+		assertEquals("7", out.get(10));   // StackTop → 7
+		assertEquals("8", out.get(11));   // StackBottom → 8
+		assertEquals("2", out.get(12));   // REG2 → 2
+		assertEquals("0", out.get(13));   // REG0 novamente → 0
+
+		// --- testar que números comuns NÃO mudam ---
+		assertEquals("9",  out.get(0));
+		assertEquals("42", out.get(2));
+		assertEquals("13", out.get(5));
+		assertEquals("99", out.get(8));
+		assertEquals("7",  out.get(14));
 	}
-	
+
 	@Test
 	public void testCheckLabels() {
 		Assembler ass = new Assembler();
 		ArrayList<String> sampleexec = new ArrayList<>();
-		
+
 		//creating a fictional exec program with some variables
 		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&label1"); 
+		ass.getObjProgram().add("&label1");
 		ass.getObjProgram().add("9");
 		ass.getObjProgram().add("9");
 		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&label2"); 
+		ass.getObjProgram().add("&label2");
 		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&var1"); 
-		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&label3"); 
-		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&label3"); 
-		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&var1"); 
-		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&label1"); 
+		ass.getObjProgram().add("&var1");
 		ass.getObjProgram().add("9");
 		ass.getObjProgram().add("9");
+		ass.getObjProgram().add("&label3");
 		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&var2"); 
+		ass.getObjProgram().add("&label3");
 		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&var1"); 
+		ass.getObjProgram().add("&var1");
+		ass.getObjProgram().add("9");
+		ass.getObjProgram().add("&label1");
 		ass.getObjProgram().add("9");
 		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&label3"); 
 		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&var3"); 
+		ass.getObjProgram().add("&var2");
 		ass.getObjProgram().add("9");
-		ass.getObjProgram().add("&label1"); 
-		
-		
+		ass.getObjProgram().add("&var1");
+		ass.getObjProgram().add("9");
+		ass.getObjProgram().add("9");
+		ass.getObjProgram().add("&label3");
+		ass.getObjProgram().add("9");
+		ass.getObjProgram().add("&var3");
+		ass.getObjProgram().add("9");
+		ass.getObjProgram().add("&label1");
+
+
 		//case 1: some labels are not found
-		
-						//inserting the labels
-						ass.getLabels().add("label1");
-						ass.getLabels().add("label2");
-						//label 3 is missing
-						
 
-								
-						//now inserting variables
-						ass.getVariables().add("var1");
-						ass.getVariables().add("var2");
-						ass.getVariables().add("var3");
+		//inserting the labels
+		ass.getLabels().add("label1");
+		ass.getLabels().add("label2");
+		//label 3 is missing
 
-		
-						assertFalse(ass.checkLabels());
 
-						
+
+		//now inserting variables
+		ass.getVariables().add("var1");
+		ass.getVariables().add("var2");
+		ass.getVariables().add("var3");
+
+
+		assertFalse(ass.checkLabels());
+
+
 		//case 2: some variables are not found
-						
-						ass.getLabels().clear();
-						ass.getVariables().clear();
+
+		ass.getLabels().clear();
+		ass.getVariables().clear();
 
 
-						//inserting the labels
-						ass.getLabels().add("label1");
-						ass.getLabels().add("label2");
-						ass.getLabels().add("label3");
-				
-								
-						//now inserting variables
-						ass.getVariables().add("var1");
-						ass.getVariables().add("var2");
-						//var3 is missing
-		
-						assertFalse(ass.checkLabels());
-						
+		//inserting the labels
+		ass.getLabels().add("label1");
+		ass.getLabels().add("label2");
+		ass.getLabels().add("label3");
+
+
+		//now inserting variables
+		ass.getVariables().add("var1");
+		ass.getVariables().add("var2");
+		//var3 is missing
+
+		assertFalse(ass.checkLabels());
+
 		//case 3: all variables and labels are found
-						
-						ass.getLabels().clear();
-						ass.getVariables().clear();
+
+		ass.getLabels().clear();
+		ass.getVariables().clear();
 
 
-						//inserting the labels
-						ass.getLabels().add("label1");
-						ass.getLabels().add("label2");
-						ass.getLabels().add("label3");
-				
-								
-						//now inserting variables
-						ass.getVariables().add("var1");
-						ass.getVariables().add("var2");
-						ass.getVariables().add("var3");
-		
-						assertTrue(ass.checkLabels());
-		
+		//inserting the labels
+		ass.getLabels().add("label1");
+		ass.getLabels().add("label2");
+		ass.getLabels().add("label3");
+
+
+		//now inserting variables
+		ass.getVariables().add("var1");
+		ass.getVariables().add("var2");
+		ass.getVariables().add("var3");
+
+		assertTrue(ass.checkLabels());
+
 	}
-	
-	
+
+
 	//@Test
 	public void testRead() {
 		fail("Not yet implemented");

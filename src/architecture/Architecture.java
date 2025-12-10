@@ -820,46 +820,44 @@ public class Architecture {
 	}
 
 	public void addImmReg() {
-		// --- LER IMEDIATO ---
+
+		// --- PC + 1 → IMEDIATO ---
 		PC.internalRead();
 		ula.store(1);
 		ula.inc();
 		ula.read(1);
-		PC.internalStore();   // PC agora aponta para o imediato
+		PC.internalStore();      // PC aponta para imediato
 
+		// --- LER IMEDIATO E GUARDAR EM PC ---
 		PC.read();
-		memory.read();        // imediato está no extbus1
-		IR.store();           // guarda imediato no IR
+		memory.read();           // extbus1 = imediato
+		PC.store();              // PC = imediato
 
-		// --- AVANÇAR PARA O REGISTRADOR ---
-		PC.internalRead();
-		ula.store(1);
+		// --- COLOCAR IMEDIATO NA ULA (OPERANDO 0) ---
+		PC.internalRead();       // intbus1 = imediato
+		ula.store(0);            // ULA[0] = imediato
+
+		// --- PC + 1 → REG DESTINO ---
 		ula.inc();
 		ula.read(1);
-		PC.internalStore();   // PC agora aponta para o id do registrador
+		PC.internalStore();      // PC aponta para id do registrador
 
-		// --- LER REGISTRADOR ---
+		// --- LER ID DO REG, LER VALOR DO REG → OPERANDO 1 ---
 		PC.read();
-		memory.read();        // id do registrador no extbus1
+		memory.read();           // extbus1 = id do registrador
 		demux.setValue(extbus1.get());
-		registersInternalRead(); // lê RegA → intbus1
+		registersInternalRead(); // valor do registrador → intbus2
+		ula.internalStore(1);    // ULA[1] = valor do registrador
 
-		ula.internalStore(1);     // coloca RegA no acumulador da ULA
-
-		// --- RECUPERAR O IMEDIATO ---
-		IR.internalRead();    // imediato volta para o barramento interno
-		ula.internalStore(0); // guarda imediato no operando 0 da ULA
-
-		// --- SOMA ---
-		ula.add();            // ULA[1] = ULA[0] + ULA[1]
-		ula.internalRead(1);  // resultado no intbus2
-
+		// --- SOMA: REG + IMEDIATO ---
+		ula.add();               // resultado em registrador interno da ULA (1)
+		ula.internalRead(1);     // intbus2 = resultado
 		setStatusFlags(intbus2.get());
 
-		// --- ESCREVER NO REGISTRADOR ---
-		registersInternalStore();
+		// --- ESCREVER RESULTADO NO MESMO REGISTRADOR DESTINO ---
+		registersInternalStore(); // escreve intbus2 no reg selecionado pelo demux
 
-		// --- AVANÇAR PC ---
+		// --- AVANÇAR PC PARA A PRÓXIMA INSTRUÇÃO ---
 		PC.internalRead();
 		ula.store(1);
 		ula.inc();
@@ -1102,50 +1100,42 @@ public class Architecture {
 	}
 
 	public void subImmReg() {
-		// --- LER IMEDIATO ---
+
+		// --- PC + 1 → IMEDIATO ---
 		PC.internalRead();
 		ula.store(1);
 		ula.inc();
 		ula.read(1);
-		PC.internalStore();     // PC agora aponta para o imediato
+		PC.internalStore();      // PC aponta para imediato
 
+		// --- LER IMEDIATO E GUARDAR EM PC ---
 		PC.read();
-		memory.read();          // imediato está no extbus1
-		IR.store();             // guarda imediato no IR
+		memory.read();           // extbus1 = imediato
+		PC.store();              // PC = imediato
 
+		// --- COLOCAR IMEDIATO NA ULA (OPERANDO 0) ---
+		PC.internalRead();       // intbus1 = imediato
+		ula.store(0);            // ULA[0] = imediato
 
-		// --- AVANÇAR PARA O REGISTRADOR ---
-		PC.internalRead();
-		ula.store(1);
+		// --- PC + 1 → REG DESTINO ---
 		ula.inc();
 		ula.read(1);
-		PC.internalStore();     // PC agora aponta para o id do registrador
+		PC.internalStore();      // PC aponta para id do registrador
 
-
-		// --- LER REGISTRADOR ---
+		// --- LER ID DO REG, LER VALOR DO REG → OPERANDO 1 ---
 		PC.read();
-		memory.read();          // id do registrador no extbus1
+		memory.read();           // extbus1 = id do registrador
 		demux.setValue(extbus1.get());
-		registersInternalRead();   // RegA → intbus1
+		registersInternalRead(); // valor do registrador → intbus2
+		ula.internalStore(1);    // ULA[1] = valor do registrador
 
-		ula.internalStore(1);      // coloca RegA em operando 1
-
-
-		// --- RECUPERAR IMEDIATO ---
-		IR.internalRead();         // imediato → intbus?
-		ula.internalStore(0);      // imediato vai para operando 0
-
-
-		// --- SUBTRAÇÃO ---
-		ula.sub();                 // resultado = imediato - RegA
-		ula.internalRead(1);       // resultado → intbus2
-
+		// --- SUBTRAÇÃO: REG - IMEDIATO ---
+		ula.sub();               // resultado em ULA[1]
+		ula.internalRead(1);     // intbus2 = resultado
 		setStatusFlags(intbus2.get());
 
-
-		// --- ARMAZENAR NO REGISTRADOR ---
+		// --- ESCREVER RESULTADO NO MESMO REGISTRADOR DESTINO ---
 		registersInternalStore();
-
 
 		// --- AVANÇAR PC ---
 		PC.internalRead();
@@ -1429,60 +1419,68 @@ public class Architecture {
 
 	public void jneq() {
 
-		// --- LER RegA ---
+		// ---- LER ID DO REG A ----
 		PC.internalRead();
 		ula.store(1);
 		ula.inc();
 		ula.read(1);
-		PC.internalStore();     // PC agora aponta para RegA
+		PC.internalStore();          // PC++
 		PC.read();
-		memory.read();
-		demux.setValue(extbus1.get());
-		registersInternalRead();    // RegA → intbus1
-		ula.internalStore(0);       // operando0 = RegA
+		memory.read();               // extbus1 = idA
+		int regA = extbus1.get();
 
+		// ---- LER VALOR DO REG A ----
+		demux.setValue(regA);
+		registersInternalRead();     // regA → intbus1
+		ula.internalStore(0);        // operando0 = regA
 
-		// --- LER RegB ---
+		// ---- LER ID DO REG B ----
+		PC.internalRead();
+		ula.store(1);
 		ula.inc();
 		ula.read(1);
-		PC.internalStore();         // PC agora aponta para RegB
+		PC.internalStore();          // PC++
 		PC.read();
-		memory.read();
-		demux.setValue(extbus1.get());
-		registersInternalRead();    // RegB → intbus1
-		ula.internalStore(1);       // operando1 = RegB
+		memory.read();               // extbus1 = idB
+		int regB = extbus1.get();
 
+		// ---- LER VALOR DO REG B ----
+		demux.setValue(regB);
+		registersInternalRead();     // regB → intbus1
+		ula.internalStore(1);        // operando1 = regB
 
-		// --- SUBTRAÇÃO PARA TESTAR IGUALDADE ---
+		// ---- COMPARAÇÃO: (regA - regB) ----
 		ula.sub();
-		ula.internalRead(1);        // resultado → intbus2
+		ula.internalRead(1);
+
+		// ---- ATUALIZAR FLAGS ----
 		setStatusFlags(intbus2.get());
 
-
-		// --- LER ENDEREÇO DE DESVIO (mem) ---
+		// ---- LER ENDEREÇO DO SALTO ----
+		PC.internalRead();
+		ula.store(1);
 		ula.inc();
 		ula.read(1);
-		PC.internalStore();         // PC agora aponta para o endereço de salto
+		PC.internalStore();          // PC++
 		PC.read();
-		memory.read();              // endereço de salto em extbus1
-		statusMemory.storeIn1();    // caso resultado != 0 (zeroBit = 0) → queremos ir ao salto
+		memory.read();               // extbus1 = endereço destino
+		int destino = extbus1.get();
 
+		// ---- CHECAR ZERO (igualdade) ----
+		int zero = Flags.getBit(0);
 
-		// --- CALCULAR PRÓXIMA INSTRUÇÃO ---
-		ula.inc();
-		ula.read(1);
-		PC.internalStore();         // PC aponta para instrução seguinte
-		PC.read();                  // endereço sequencial em extbus1
-		statusMemory.storeIn0();    // caso resultado == 0 → NÃO pular → PC sequencial
-
-
-		// --- SELECIONAR ENDEREÇO ---
-		extbus1.put(Flags.getBit(0));   // bitZero → 1 se RegA == RegB
-		// portanto:
-		// 0 → jump
-		// 1 → sequential
-		statusMemory.read();            // pega endereço correto
-		PC.store();                     // atualiza PC
+		if (zero == 0) {
+			// RegA != RegB → DESVIO
+			extbus1.put(destino);
+			PC.store();
+		} else {
+			// Sem desvio → PC = PC + 1
+			PC.internalRead();
+			ula.store(1);
+			ula.inc();
+			ula.read(1);
+			PC.internalStore();
+		}
 	}
 
 	/**
@@ -2204,41 +2202,42 @@ public class Architecture {
 	 * 
 	 *//* */
 	public void moveImmReg() {
-		// PC + 1 → aponta para o imediato
+
+		// --- PC + 1 → IMEDIATO ---
 		PC.internalRead();
 		ula.store(1);
 		ula.inc();
 		ula.read(1);
-		PC.internalStore(); // agora PC aponta para o imediato
+		PC.internalStore();   // PC agora aponta para o imediato (PC = PC + 1)
 
-		// Lê o imediato
+		// --- LER IMEDIATO E GUARDAR NO PC ---
 		PC.read();
-		memory.read();      // imediato está no extbus1
-		PC.store();         // guarda o imediato dentro do próprio PC (temporário)
+		memory.read();        // extbus1 = memória[PC] (imediato)
+		PC.store();           // PC = imediato
 
-		// Usa StackTop como "backup" do PC original
-		PC.internalRead();
-		StackTop.internalStore();   // salva o endereço do registrador em StackTop
+		// --- BACKUP DO VALOR (imediato) EM StackTop ---
+		PC.internalRead();    // intbus1 = PC (imediato)
+		StackTop.internalStore(); // StackTop = imediato via intbus1
 
-		// PC + 1 → endereço do registrador
+		// --- PC + 1 → ID DO REGISTRADOR DESTINO ---
 		ula.inc();
 		ula.read(1);
-		PC.internalStore();
+		PC.internalStore();   // PC agora aponta para o id do registrador
 
-		// Lê id do registrador
+		// --- LER ID DO REGISTRADOR E CONFIGURAR DEMUX ---
 		PC.read();
-		memory.read();
-		demux.setValue(extbus1.get());  // seleciona o registrador destino
+		memory.read();        // extbus1 = id do registrador
+		demux.setValue(extbus1.get());
 
-		// Recupera o imediato do PC para o barramento interno
-		StackTop.internalRead();
-		PC.internalStore();            // PC volta a ser o imediato
+		// --- RESTAURAR O IMEDIATO EM PC ---
+		StackTop.internalRead(); // intbus1 = imediato
+		PC.internalStore();      // PC = imediato
 
-		// Escreve o imediato no registrador selecionado
-		PC.read();
-		registersStore();              // grava no registrador (via demux)
+		// --- ESCREVER IMEDIATO NO REGISTRADOR DESTINO ---
+		PC.read();               // extbus1 = imediato
+		registersStore();        // registrador selecionado recebe extbus1
 
-		// Avança PC para próxima instrução
+		// --- AVANÇAR PC PARA A PRÓXIMA INSTRUÇÃO ---
 		ula.inc();
 		ula.read(1);
 		PC.internalStore();
@@ -2335,7 +2334,6 @@ public class Architecture {
 		int command = extbus1.get();
 		simulationDecodeExecuteBefore(command);
 		switch (command) {
-
 			case 0:
 				addRegReg();
 				break;

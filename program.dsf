@@ -1,9 +1,8 @@
-move -10 %REG0
-move 1 %REG1
-teste:
-add %REG0 %REG1
-move %REG1 %REG0
-move 1 %REG1
-jz fim
-jmp teste
+move 10 %REG0
+move 20 %REG1
+jneq %REG0 %REG1 salto
+move 0 %REG2
+jmp fim
+salto:
+move 1 %REG2
 fim:
