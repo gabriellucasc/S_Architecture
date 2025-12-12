@@ -1,8 +1,16 @@
-move 10 %REG0
-move 20 %REG1
-jneq %REG0 %REG1 salto
-move 0 %REG2
-jmp fim
-salto:
+move 8 %REG0
+move 0 %REG1
 move 1 %REG2
-fim:
+
+FIB_LOOP:
+jz %REG0 FIB_END
+
+move %REG2 %REG3
+add %REG1 %REG3
+move %REG2 %REG1
+move %REG3 %REG2
+sub 1 %REG0
+jmp FIB_LOOP
+
+FIB_END:
+END:

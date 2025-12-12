@@ -11,17 +11,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Assembler {
-
+	
 	private ArrayList<String> lines;
 	private ArrayList<String> objProgram;
 	private ArrayList<String> execProgram;
 	private Architecture arch;
-	private ArrayList<String>commands;
+	private ArrayList<String>commands;	
 	private ArrayList<String>labels;
 	private ArrayList<Integer> labelsAdresses;
 	private ArrayList<String>variables;
-
-
+	
+	
 	public Assembler() {
 		lines = new ArrayList<>();
 		labels = new ArrayList<>();
@@ -30,45 +30,45 @@ public class Assembler {
 		objProgram = new ArrayList<>();
 		execProgram = new ArrayList<>();
 		arch = new Architecture();
-		commands = arch.getCommandsList();
+		commands = arch.getCommandsList();	
 	}
-
+	
 	//getters
-
+	
 	public ArrayList<String> getObjProgram() {
 		return objProgram;
 	}
-
+	
 	/**
 	 * These methods getters and set below are used only for TDD purposes
 	 * @param lines
 	 */
-
+	
 	protected ArrayList<String> getLabels() {
 		return labels;
 	}
-
+	
 	protected ArrayList<Integer> getLabelsAddresses() {
 		return labelsAdresses;
 	}
-
+	
 	protected ArrayList<String> getVariables() {
 		return variables;
 	}
-
+	
 	protected ArrayList<String> getExecProgram() {
 		return execProgram;
 	}
-
+	
 	protected void setLines(ArrayList<String> lines) {
 		this.lines = lines;
-	}
+	}	
 
 	protected void setExecProgram(ArrayList<String> lines) {
 		this.execProgram = lines;
-	}
-
-
+	}	
+	
+	
 	/*
 	 * An assembly program is always in the following template
 	 * <variables>
@@ -79,29 +79,29 @@ public class Assembler {
 	 *      variables names never uses any command name
 	 * 		names ended with ":" identifies labels i.e. address in the memory
 	 * 		Commands are only that ones known in the architecture. No comments allowed
-	 *
+	 * 	
 	 * 		The assembly file must have the extention .dsf
-	 * 		The executable file must have the extention .dxf
+	 * 		The executable file must have the extention .dxf 	
 	 */
-
+	
 
 
 	/**
-	 * This method reads an entire file in assembly
+	 * This method reads an entire file in assembly 
 	 * @param filename
-	 * @throws IOException
+	 * @throws IOException 
 	 */
 	public void read(String filename) throws IOException {
-		   BufferedReader br = new BufferedReader(new
+		   BufferedReader br = new BufferedReader(new		 
 		   FileReader(filename+".dsf"));
 		   String linha;
 		   while ((linha = br.readLine()) != null) {
 			     lines.add(linha);
 			}
 			br.close();
-
+			
 	}
-
+	
 
 	/**
 	 * This method scans the strings in lines
@@ -124,8 +124,10 @@ public class Assembler {
 					variables.add(tokens[0]);
 			}
 		}
-
+		
 	}
+
+
 
 	/**
 	 * This method processes a command, putting it and its parameters (if they have)
@@ -140,11 +142,11 @@ public class Assembler {
 		int commandNumber = findCommandNumber(tokens);
 		if (commandNumber == 0) { //must to proccess an addRegReg command
 			parameter = tokens[1];
-			parameter2 = tokens[2];
+			parameter2 = tokens[2]; 
 		}
 		if (commandNumber == 1) { //must to proccess an addMenReg command
-			parameter = "&"+tokens[1];//this is a flag to indicate that is a position in memory
-			parameter2 = tokens[2];
+			parameter = "&"+tokens[1];//this is a flag to indicate that is a position in memory	
+			parameter2 = tokens[2];	
 		}
 		if (commandNumber == 2) { //must to proccess an addRegMen command
 			parameter = tokens[1];
@@ -192,7 +194,7 @@ public class Assembler {
 		}
 		if (commandNumber == 13) { //incReg
 			parameter =tokens[1];
-
+			
 		}
 		if (commandNumber == 14) { //incMem
 			parameter = "&"+tokens[1];
@@ -231,14 +233,14 @@ public class Assembler {
 			parameter3 = tokens[3];
 			parameter3 = "&" + parameter3;
 		}
-		if (commandNumber == 22) { //must to proccess an addImmReg command
-			parameter = tokens[1];
-			parameter2 = tokens[2];
-		}
-		if (commandNumber == 23) { //must to proccess an subImmReg command
-			parameter = tokens[1];
-			parameter2 = tokens[2];
-		}
+        if (commandNumber == 22) { //must to proccess an addImmReg command
+            parameter = tokens[1];
+            parameter2 = tokens[2];
+        }
+        if (commandNumber == 23) { //must to proccess an subImmReg command
+            parameter = tokens[1];
+            parameter2 = tokens[2];
+        }
         if (commandNumber == 24) { //must to proccess an jneq command
             parameter = tokens[1];
             parameter2 = tokens[2];
@@ -256,6 +258,7 @@ public class Assembler {
 			objProgram.add(parameter3);
 		}
 	}
+	
 
 	/**
 	 * This method uses the tokens to search a command
@@ -271,23 +274,23 @@ public class Assembler {
 			if (p < 0) { // the command isn't in the list. So it must have multiple formats
 				if ("move".equals(tokens[0])) { // the command is a move
 					p = proccessMove(tokens);
-				}
+				} 
 				else if ("add".equals(tokens[0])) {
 					p = proccessAdd(tokens);
 				}
 				else if("imul".equals(tokens[0])) {
 					p = proccessImul(tokens);
-				}
+				} 
 				else if("sub".equals(tokens[0])) {
 					p = proccessSub(tokens);
-				}
+				} 
 				else if("inc".equals(tokens[0])) {
 					p = proccessInc(tokens);
 				}
 			}
 			return p;
 		}
-
+	
 
 	/**
 	 * This method proccess a move command.
@@ -295,130 +298,139 @@ public class Assembler {
 	 * @param tokens
 	 * @return
 	 */
-
+	
 	 private int proccessMove(String[] tokens) {
-
+		
 		String p1 = tokens[1];
 		String p2 = tokens[2];
 		int p=-1;
 		System.out.println(p1 + p2);
 
-		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { // Comando subRegReg
+		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { // Comando moveRegReg
 			p = commands.indexOf("moveRegReg");
 		}
 
-		else if( (p1.startsWith("%")) ) {
-			p = commands.indexOf("moveRegMem");
-		}
+        else if (p1.startsWith("%") && p2.matches("[A-Za-z][A-Za-z0-9]*")) {
+            p = commands.indexOf("moveRegMem");
+        }
 
 		else if( (p1.matches("[-]*[0-9]+")) && (p2.startsWith("%")) ) { // não temos
 			p = commands.indexOf("moveImmReg");
 		}
-		else if( (p2.startsWith("%")) ) {
-			p = commands.indexOf("moveMemReg");
-		}
+        else if (p2.startsWith("%") && p1.matches("[A-Za-z][A-Za-z0-9]*")) {
+            p = commands.indexOf("moveMemReg");
+        }
 		return p;
 
 	}
 
 	private int proccessAdd( String[] tokens ) {
-
+		
 		String p1 = tokens[1];
 		String p2 = tokens[2];
 		int p=-1;
-
+		
 		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { // Comando subRegReg
 			p = commands.indexOf("addRegReg");
 		}
 
-		else if( (p1.startsWith("%")) ) {
-			p = commands.indexOf("addRegMem");
-		}
+        else if (p1.startsWith("%") && p2.matches("[A-Za-z][A-Za-z0-9]*")) {
+            p = commands.indexOf("addRegMem");
+        }
 
 		else if( (p1.matches("[-]*[0-9]+")) && (p2.startsWith("%")) ) {
 			p = commands.indexOf("addImmReg");
 		}
-		else if( (p2.startsWith("%")) ) {
-			p = commands.indexOf("addMemReg");
-		}
+
+        else if (p2.startsWith("%") && p1.matches("[A-Za-z][A-Za-z0-9]*")) {
+            p = commands.indexOf("addMemReg");
+        }
 		return p;
 
 	}
 
-	private int proccessSub( String[] tokens ) {
+    private int proccessSub(String[] tokens) {
 
-		String p1 = tokens[1];
-		String p2 = tokens[2];
-		int p =-1;
+        String p1 = tokens[1];
+        String p2 = tokens[2];
+        int p = -1;
 
-		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { // Comando subRegReg
-			p = commands.indexOf("subRegReg");
-		}
+        // sub %REGa %REGb
+        if (p1.startsWith("%") && p2.startsWith("%")) {
+            p = commands.indexOf("subRegReg");
+        }
 
-		else if( (p1.startsWith("%")) ) {
-			p = commands.indexOf("subRegMem");
-		}
+        // sub %REG mem
+        else if (p1.startsWith("%") && p2.matches("[A-Za-z][A-Za-z0-9]*")) {
+            p = commands.indexOf("subRegMem");
+        }
 
-		else if( (p1.matches("[-]*[0-9]+")) && (p2.startsWith("%")) ) {
-			p = commands.indexOf("subImmReg");
-		}
-		else if( (p2.startsWith("%")) ) {
-			p = commands.indexOf("subMemReg");
-		}
-		return p;
+        // sub imm %REG
+        else if (p1.matches("[-]?[0-9]+") && p2.startsWith("%")) {
+            p = commands.indexOf("subImmReg");
+        }
 
-	}
+        // sub mem %REG
+        else if (p2.startsWith("%") && p1.matches("[A-Za-z][A-Za-z0-9]*")) {
+            p = commands.indexOf("subMemReg");
+        }
 
-	private int proccessInc( String[] tokens ) {
+        return p;
+    }
 
-		String p1 = tokens[1];
-		int p =-1;
+    private int proccessInc(String[] tokens) {
 
-		if ( (p1.startsWith("%")) ) { // Comando incReg
-			p = commands.indexOf("incReg");
-		}
+        String p1 = tokens[1];
+        int p = -1;
 
-		else if( (p1.matches("[A-Za-z]+")) ) { // Comando incMem
-			p = commands.indexOf("incMem");
-		}
+        // inc %REG
+        if (p1.startsWith("%")) {
+            p = commands.indexOf("incReg");
+        }
 
-		return p;
+        // inc mem
+        else if (p1.matches("[A-Za-z][A-Za-z0-9]*")) {
+            p = commands.indexOf("incMem");
+        }
 
-	}
+        return p;
+    }
 
-	private int proccessImul( String[] tokens ) {
+    private int proccessImul(String[] tokens) {
 
-		String p1 = tokens[1];
-		String p2 = tokens[2];
-		int p =-1;
+        String p1 = tokens[1];
+        String p2 = tokens[2];
+        int p = -1;
 
-		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { // Comando imulRegReg
-			p = commands.indexOf("imulRegReg");
-		}
+        // imul %REG %REG
+        if (p1.startsWith("%") && p2.startsWith("%")) {
+            p = commands.indexOf("imulRegReg");
+        }
 
-		else if( (p1.startsWith("%")) && (p2.matches("[A-Za-z]+")) ) {
-			p = commands.indexOf("imulRegMem");
-		}
+        // imul %REG mem
+        else if (p1.startsWith("%") && p2.matches("[A-Za-z][A-Za-z0-9]*")) {
+            p = commands.indexOf("imulRegMem");
+        }
 
-		else if( (p1.matches("[A-Za-z]+")) && (p2.startsWith("%")) ) {
-			p = commands.indexOf("imulMemReg");
-		}
+        // imul mem %REG
+        else if (p1.matches("[A-Za-z][A-Za-z0-9]*") && p2.startsWith("%")) {
+            p = commands.indexOf("imulMemReg");
+        }
 
-		return p;
-
-	}
+        return p;
+    }
 
 	/**
 	 * This method creates the executable program from the object program
-	 * Step 1: check if all variables and labels mentioned in the object
+	 * Step 1: check if all variables and labels mentioned in the object 
 	 * program are declared in the source program
 	 * Step 2: allocate memory addresses (space), from the end to the begin (stack)
 	 * to store variables
 	 * Step 3: identify memory positions to the labels
 	 * Step 4: make the executable by replacing the labels and the variables by the
-	 * corresponding memory addresses
-	 * @param filename
-	 * @throws IOException
+	 * corresponding memory addresses 
+	 * @param filename 
+	 * @throws IOException 
 	 */
 	public void makeExecutable(String filename) throws IOException {
 		if (!checkLabels())
@@ -446,7 +458,7 @@ public class Assembler {
 			}
 			p++;
 		}
-
+		
 	}
 
 	/**
@@ -465,7 +477,7 @@ public class Assembler {
 	/**
 	 * This method saves the execFile collection into the output file
 	 * @param filename
-	 * @throws IOException
+	 * @throws IOException 
 	 */
 	private void saveExecFile(String filename) throws IOException {
 		File file = new File(filename+".dxf");
@@ -474,7 +486,7 @@ public class Assembler {
 			writer.write(l+"\n");
 		writer.write("-1"); //-1 is a flag indicating that the program is finished
 		writer.close();
-
+		
 	}
 
 	/**
@@ -496,7 +508,7 @@ public class Assembler {
 			}
 			i++;
 		}
-
+		
 	}
 
 	/**
@@ -542,7 +554,7 @@ public class Assembler {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * This method searches for a register in the architecture register list
 	 * by the register name
@@ -571,5 +583,5 @@ public class Assembler {
 		System.out.println("Generating executable: "+filename+".dxf");
 		assembler.makeExecutable(filename);
 	}
-
+		
 }
