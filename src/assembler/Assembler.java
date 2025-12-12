@@ -306,7 +306,7 @@ public class Assembler {
 		int p=-1;
 		System.out.println(p1 + p2);
 
-		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { // Comando moveRegReg
+		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { 
 			p = commands.indexOf("moveRegReg");
 		}
 
@@ -314,7 +314,7 @@ public class Assembler {
             p = commands.indexOf("moveRegMem");
         }
 
-		else if( (p1.matches("[-]*[0-9]+")) && (p2.startsWith("%")) ) { // não temos
+		else if( (p1.matches("[-]*[0-9]+")) && (p2.startsWith("%")) ) { 
 			p = commands.indexOf("moveImmReg");
 		}
         else if (p2.startsWith("%") && p1.matches("[A-Za-z][A-Za-z0-9]*")) {
@@ -330,7 +330,7 @@ public class Assembler {
 		String p2 = tokens[2];
 		int p=-1;
 		
-		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { // Comando subRegReg
+		if ( (p1.startsWith("%")) && (p2.startsWith("%")) ) { 
 			p = commands.indexOf("addRegReg");
 		}
 

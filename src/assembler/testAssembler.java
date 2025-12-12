@@ -540,47 +540,38 @@ public class testAssembler {
         Assembler ass = new Assembler();
         ArrayList<String> sampleexec = new ArrayList<>();
 
-        /*
-         * Programa fictício misturando opcodes e operandos reais.
-         * Registradores prefixados com % devem ser substituídos por seus ids.
-         */
+        sampleexec.add("9");              
+        sampleexec.add("%REG1");           
+        sampleexec.add("42");             
+        sampleexec.add("%PC");             
+        sampleexec.add("%REG0");           
+        sampleexec.add("13");             
+        sampleexec.add("%REG3");           
+        sampleexec.add("%IR");             
+        sampleexec.add("99");             
+        sampleexec.add("%Flags");          
+        sampleexec.add("%StackTop");       
+        sampleexec.add("%StackBottom");    
+        sampleexec.add("%REG2");           
+        sampleexec.add("%REG0");           
+        sampleexec.add("7");        
 
-        sampleexec.add("9");              // 0
-        sampleexec.add("%REG1");          // 1 → 1
-        sampleexec.add("42");             // 2
-        sampleexec.add("%PC");            // 3 → 4
-        sampleexec.add("%REG0");          // 4 → 0
-        sampleexec.add("13");             // 5
-        sampleexec.add("%REG3");          // 6 → 3
-        sampleexec.add("%IR");            // 7 → 5
-        sampleexec.add("99");             // 8
-        sampleexec.add("%Flags");         // 9 → 6
-        sampleexec.add("%StackTop");      // 10 → 7
-        sampleexec.add("%StackBottom");   // 11 → 8
-        sampleexec.add("%REG2");          // 12 → 2
-        sampleexec.add("%REG0");          // 13 → 0 (segunda ocorrência)
-        sampleexec.add("7");              // 14
-
-        ass.setExecProgram(sampleexec);
-
-        // ação
+		ass.setExecProgram(sampleexec);
         ass.replaceRegisters();
 
         ArrayList<String> out = ass.getExecProgram();
 
-        // --- testes (verificação dos registradores) ---
-        assertEquals("1", out.get(1));    // REG1 → 1
-        assertEquals("4", out.get(3));    // PC   → 4
-        assertEquals("0", out.get(4));    // REG0 → 0
-        assertEquals("3", out.get(6));    // REG3 → 3
-        assertEquals("5", out.get(7));    // IR   → 5
-        assertEquals("6", out.get(9));    // Flags → 6
-        assertEquals("7", out.get(10));   // StackTop → 7
-        assertEquals("8", out.get(11));   // StackBottom → 8
-        assertEquals("2", out.get(12));   // REG2 → 2
-        assertEquals("0", out.get(13));   // REG0 novamente → 0
+        assertEquals("1", out.get(1));    
+        assertEquals("4", out.get(3));   
+        assertEquals("0", out.get(4));    
+        assertEquals("3", out.get(6));    
+        assertEquals("5", out.get(7));    
+        assertEquals("6", out.get(9));    
+        assertEquals("7", out.get(10));   
+        assertEquals("8", out.get(11));   
+        assertEquals("2", out.get(12));   
+        assertEquals("0", out.get(13));    
 
-        // --- testar que números comuns NÃO mudam ---
         assertEquals("9",  out.get(0));
         assertEquals("42", out.get(2));
         assertEquals("13", out.get(5));

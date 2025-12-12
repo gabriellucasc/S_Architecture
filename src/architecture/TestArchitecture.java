@@ -67,33 +67,25 @@ public class TestArchitecture {
         arch.getExtbus1().put(40);
         arch.getPC().store();      //PC points to position 40
 
-        // Precisamos que reg0 tenha um valor
         arch.getExtbus1().put(3);
         arch.getREG0().store();
 
 
-        //Agora precisamos que tenha um endereço na memória
         arch.getExtbus1().put(41);
         arch.getMemory().store();
         arch.getExtbus1().put(70);
         arch.getMemory().store();
 
-        // Precisamos de um valor em mem[70]
         arch.getExtbus1().put(70);
         arch.getMemory().store();
         arch.getExtbus1().put(4);
         arch.getMemory().store();
 
-        // Agora precisamos que logo após o comando add tenhamos o id do registrador
-        // Registador 0 na posição 42
         arch.getExtbus1().put(42);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-
-        // Vamos colocar um jmp pro final do programa na posição 43
-        // Para o controlUnitExec não se perder
         arch.getExtbus1().put(43);
         arch.getMemory().store();
         arch.getExtbus1().put(15);
@@ -138,27 +130,21 @@ public class TestArchitecture {
         arch.getExtbus1().put(4);
         arch.getREG0().store();
 
-        // Agora precisamos que logo após o comando add tenhamos o id do registrador
-        // Registador 0 na posição 41
         arch.getExtbus1().put(41);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        //Agora precisamos que tenha um endereço na memória logo após o que guardava o id do registrador
         arch.getExtbus1().put(42);
         arch.getMemory().store();
         arch.getExtbus1().put(70);
         arch.getMemory().store();
 
-        // Precisamos de um valor em mem[70]
         arch.getExtbus1().put(70);
         arch.getMemory().store();
         arch.getExtbus1().put(3);
         arch.getMemory().store();
 
-        // Vamos colocar um jmp pro final do programa na posição 43
-        // Para o controlUnitExec não se perder
         arch.getExtbus1().put(43);
         arch.getMemory().store();
         arch.getExtbus1().put(15);
@@ -200,30 +186,23 @@ public class TestArchitecture {
         arch.getExtbus1().put(40);
         arch.getPC().store();      //PC points to position 40
 
-        // Precisamos que reg0 tenha um valor
         arch.getExtbus1().put(4);
         arch.getREG0().store();
 
-        // Precisamos que reg2 tenha um valor
         arch.getExtbus1().put(3);
         arch.getREG2().store();
 
-        // Agora precisamos que logo após o comando add tenhamos o id do registrador
-        // Registador 0 na posição 41
         arch.getExtbus1().put(41);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        //Agora precisamos que tenha um endereço na memória logo após o que guardava o id do registrador
         arch.getExtbus1().put(42);
         arch.getMemory().store();
         arch.getExtbus1().put(2);
         arch.getMemory().store();
 
 
-        // Vamos colocar um jmp pro final do programa na posição 43
-        // Para o controlUnitExec não se perder
         arch.getExtbus1().put(43);
         arch.getMemory().store();
         arch.getExtbus1().put(15);
@@ -304,24 +283,19 @@ public class TestArchitecture {
         arch.getExtbus1().put(20);
         arch.getPC().store();      //PC points to position 10
 
-        // Precisamos que tenha um endereço na memória logo após o add
         arch.getExtbus1().put(21);
         arch.getMemory().store();
         arch.getExtbus1().put(127);
         arch.getMemory().store();
 
-        // Precisamos que mem[127] tenha um valor
         arch.getExtbus1().put(127);
         arch.getMemory().store();
         arch.getExtbus1().put(37);
         arch.getMemory().store();
 
-        // Precisamos que reg0 tenha um valor
         arch.getExtbus1().put(17);
         arch.getREG0().store();
 
-        // Agora precisamos que logo após o mem[21] tenhamos o id do registrador
-        // Registrador 0 na posição 22
         arch.getExtbus1().put(22);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
@@ -353,20 +327,16 @@ public class TestArchitecture {
         arch.getExtbus1().put(7);
         arch.getREG0().store();
 
-        // Agora precisamos que logo após o comando add tenhamos o id do registrador
-        // Registador 0 na posição 41
         arch.getExtbus1().put(41);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        //Agora precisamos que tenha um endereço na memória logo após o que guardava o id do registrador
         arch.getExtbus1().put(42);
         arch.getMemory().store();
         arch.getExtbus1().put(111);
         arch.getMemory().store();
 
-        // Precisamos de um valor em mem[111]
         arch.getExtbus1().put(111);
         arch.getMemory().store();
         arch.getExtbus1().put(3);
@@ -393,34 +363,27 @@ public class TestArchitecture {
     public void testAddImmReg() {
         Architecture arch = new Architecture();
 
-        // PC = 50
         arch.getExtbus1().put(50);
         arch.getPC().store();
 
-        // REG0 = 5
         arch.getExtbus1().put(5);
         arch.getREG0().store();
 
-        // memória[51] = imediato 7
         arch.getExtbus1().put(51);
         arch.getMemory().store();
         arch.getExtbus1().put(7);
         arch.getMemory().store();
 
-        // memória[52] = registrador destino (0)
         arch.getExtbus1().put(52);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        // executar instrução
         arch.addImmReg();
 
-        // resultado esperado: 7 + 5 = 12
         arch.getREG0().read();
         assertEquals(12, arch.getExtbus1().get());
 
-        // PC deve acabar em 53
         arch.getPC().read();
         assertEquals(53, arch.getExtbus1().get());
     }
@@ -433,20 +396,16 @@ public class TestArchitecture {
         arch.getExtbus1().put(10);
         arch.getPC().store();      //PC points to position 10
 
-        // Precisamos que reg0 e reg1 tenham um valor cada
         arch.getExtbus1().put(20);
         arch.getREG0().store();
         arch.getExtbus1().put(5);
         arch.getREG1().store();
 
-        // Agora precisamos que logo após o comando add tenhamos os ids dos registradores
-        // Registrador 0 na posição 11
         arch.getExtbus1().put(11);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        // Registrador 1 na posição 12
         arch.getExtbus1().put(12);
         arch.getMemory().store();
         arch.getExtbus1().put(1);
@@ -473,24 +432,19 @@ public class TestArchitecture {
         arch.getExtbus1().put(20);
         arch.getPC().store();      //PC points to position 10
 
-        // Precisamos que tenha um endereço na memória logo após o add
         arch.getExtbus1().put(21);
         arch.getMemory().store();
         arch.getExtbus1().put(127);
         arch.getMemory().store();
 
-        // Precisamos que mem[127] tenha um valor
         arch.getExtbus1().put(127);
         arch.getMemory().store();
         arch.getExtbus1().put(37);
         arch.getMemory().store();
 
-        // Precisamos que reg0 tenha um valor
         arch.getExtbus1().put(37);
         arch.getREG0().store();
 
-        // Agora precisamos que logo após o mem[21] tenhamos o id do registrador
-        // Registrador 0 na posição 22
         arch.getExtbus1().put(22);
         arch.getMemory().store();
 
@@ -521,20 +475,16 @@ public class TestArchitecture {
         arch.getExtbus1().put(7);
         arch.getREG0().store();
 
-        // Agora precisamos que logo após o comando add tenhamos o id do registrador
-        // Registador 0 na posição 41
         arch.getExtbus1().put(41);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        //Agora precisamos que tenha um endereço na memória logo após o que guardava o id do registrador
         arch.getExtbus1().put(42);
         arch.getMemory().store();
         arch.getExtbus1().put(111);
         arch.getMemory().store();
 
-        // Precisamos de um valor em mem[111]
         arch.getExtbus1().put(111);
         arch.getMemory().store();
         arch.getExtbus1().put(3);
@@ -560,21 +510,17 @@ public class TestArchitecture {
     public void testSubImmReg() {
         Architecture arch = new Architecture();
 
-        // PC = 60
         arch.getExtbus1().put(60);
         arch.getPC().store();
 
-        // REG0 = 4
         arch.getExtbus1().put(4);
         arch.getREG0().store();
 
-        // memória[61] = imediato 10
         arch.getExtbus1().put(61);
         arch.getMemory().store();
         arch.getExtbus1().put(10);
         arch.getMemory().store();
 
-        // memória[62] = registrador destino (0)
         arch.getExtbus1().put(62);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
@@ -582,11 +528,9 @@ public class TestArchitecture {
 
         arch.subImmReg();
 
-        // resultado esperado → 10 - 4 = 6
         arch.getREG0().read();
         assertEquals(6, arch.getExtbus1().get());
 
-        // PC deve estar em 63
         arch.getPC().read();
         assertEquals(63, arch.getExtbus1().get());
     }
@@ -596,15 +540,13 @@ public class TestArchitecture {
     public void testjmp(){
         Architecture arch = new Architecture();
         arch.getExtbus1().put(50);
-        arch.getPC().store();      //PC aponta para posição 50
+        arch.getPC().store();      
 
-        // Precisamos que mem[51] tenha um valor
         arch.getExtbus1().put(51);
         arch.getMemory().store();
         arch.getExtbus1().put(105);
         arch.getMemory().store();
 
-        // Agora basta chamar o método jmp
         arch.jmp();
         arch.getPC().read();
         assertEquals(105, arch.getExtbus1().get());
@@ -1051,31 +993,25 @@ public class TestArchitecture {
     public void testJneq() {
         Architecture arch = new Architecture();
 
-        // PC = 30
         arch.getExtbus1().put(30);
         arch.getPC().store();
 
-        // REG0 = 7
         arch.getExtbus1().put(7);
         arch.getREG0().store();
 
-        // REG1 = 7  (iguais)
         arch.getExtbus1().put(7);
         arch.getREG1().store();
 
-        // memória[31] = idA = 0
         arch.getExtbus1().put(31);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        // memória[32] = idB = 1
         arch.getExtbus1().put(32);
         arch.getMemory().store();
         arch.getExtbus1().put(1);
         arch.getMemory().store();
 
-        // memória[33] = destino (não usado)
         arch.getExtbus1().put(33);
         arch.getMemory().store();
         arch.getExtbus1().put(200);
@@ -1083,7 +1019,6 @@ public class TestArchitecture {
 
         arch.jneq();
 
-        // Não deve saltar → PC = 34
         arch.getPC().read();
         assertEquals(34, arch.getExtbus1().get());
     }
@@ -1128,13 +1063,11 @@ public class TestArchitecture {
         arch.getExtbus1().put(30);
         arch.getPC().store();      //PC points to position 30
 
-        // Precisamos que tenha um endereço na memória logo após o inc
         arch.getExtbus1().put(31);
         arch.getMemory().store();
         arch.getExtbus1().put(55);
         arch.getMemory().store();
 
-        // Precisamos que mem[55] tenha um valor
         arch.getExtbus1().put(55);
         arch.getMemory().store();
         arch.getExtbus1().put(11);
@@ -1162,20 +1095,16 @@ public class TestArchitecture {
         arch.getExtbus1().put(33);
         arch.getPC().store();      //PC points to position 33
 
-        // Precisamos que tenha um endereço na memória
         arch.getExtbus1().put(34);
         arch.getMemory().store();
         arch.getExtbus1().put(77);
         arch.getMemory().store();
 
-        // Precisamos que mem[77] tenha um valor
         arch.getExtbus1().put(77);
         arch.getMemory().store();
         arch.getExtbus1().put(17);
         arch.getMemory().store();
 
-        // Agora precisamos do id do registrador
-        // Registrador 0 na posição 22
         arch.getExtbus1().put(35);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
@@ -1201,18 +1130,14 @@ public class TestArchitecture {
         arch.getExtbus1().put(27);
         arch.getPC().store();      //PC points to position 27
 
-        // Precisamos que reg0 tenha um valor
         arch.getExtbus1().put(7);
         arch.getREG0().store();
 
-        // Agora precisamos que logo após o comando move tenhamos o id do registrador
-        // Registador 0 na posição 41
         arch.getExtbus1().put(28);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        //Agora precisamos que tenha um endereço na memória logo após o que guardava o id do registrador
         arch.getExtbus1().put(29);
         arch.getMemory().store();
         arch.getExtbus1().put(66);
@@ -1238,18 +1163,14 @@ public class TestArchitecture {
         arch.getExtbus1().put(19);
         arch.getPC().store();      //PC points to position 19
 
-        // Precisamos que reg0 tenha um valor
         arch.getExtbus1().put(10);
         arch.getREG0().store();
 
-        // Agora precisamos que logo após o comando move tenhamos os ids dos registradores
-        // Registrador 0 na posição 20
         arch.getExtbus1().put(20);
         arch.getMemory().store();
         arch.getExtbus1().put(0);
         arch.getMemory().store();
 
-        // Registrador 1 na posição 21
         arch.getExtbus1().put(21);
         arch.getMemory().store();
         arch.getExtbus1().put(1);
@@ -1273,15 +1194,11 @@ public class TestArchitecture {
         arch.getExtbus1().put(10);
         arch.getPC().store();      //PC points to position 19
 
-        // Agora precisamos que logo após o comando move tenhamos os ids dos registradores
-        // Registrador 0 na posição 20
         arch.getExtbus1().put(11);
         arch.getMemory().store();
         arch.getExtbus1().put(-40);
         arch.getMemory().store();
 
-        // Agora precisamos que logo após o comando move tenhamos os ids dos registradores
-        // Registrador 0 na posição 20
         arch.getExtbus1().put(12);
         arch.getMemory().store();
         arch.getExtbus1().put(0);

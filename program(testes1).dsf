@@ -1,0 +1,36 @@
+a
+b
+tmp
+
+move 4 %REG0
+move %REG0 a
+
+move 4 %REG0
+move %REG0 b
+
+move a %REG1
+move b %REG2
+
+move %REG1 tmp
+imul tmp %REG2
+move %REG2 a
+
+inicio:
+move a %REG1
+move b %REG2
+jeq %REG1 %REG2 fim
+jgt %REG1 %REG2 maior
+jlw %REG1 %REG2 menor
+jmp fim
+
+maior:
+move a %REG0
+move %REG0 b
+jmp inicio
+
+menor:
+move a %REG0
+move %REG0 b
+jmp inicio
+
+fim:

@@ -1,0 +1,20 @@
+a
+b
+move 4 %REG0
+move %REG0 a
+move -4 %REG0
+move %REG0 b
+inicio:
+move a %REG1
+move b %REG2
+add %REG1 %REG2
+jz testejn
+jmp fim
+testejn:
+move -5 %REG0
+move %REG0 b
+move a %REG1
+move b %REG2
+add %REG1 %REG2
+jn inicio
+fim:
