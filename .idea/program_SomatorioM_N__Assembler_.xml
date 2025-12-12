@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="program(SomatorioM-N)(Assembler)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="assembler.Assembler" />
+    <module name="simuladorArquitetura-main" />
+    <option name="PROGRAM_PARAMETERS" value="program(SomatorioM-N)" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
