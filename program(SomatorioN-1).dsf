@@ -1,0 +1,28 @@
+a
+b
+c
+
+move 1 %REG0
+move %REG0 a
+
+move 0 %REG0
+move %REG0 b
+
+move 10 %REG0
+move %REG0 c
+
+laco:
+move b %REG0
+add a %REG0
+move %REG0 b
+
+move a %REG0
+inc %REG0
+move %REG0 a
+
+move c %REG1
+sub a %REG1
+jn laco
+
+fim:
+move b %REG0

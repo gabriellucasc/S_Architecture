@@ -1,0 +1,37 @@
+M
+N
+b
+i
+
+move 5 %REG0
+move %REG0 M
+
+move 12 %REG0
+move %REG0 N
+
+move 0 %REG0
+move %REG0 b
+
+move M %REG0
+inc %REG0
+move %REG0 i
+
+laco:
+move i %REG0
+move N %REG1
+jneq %REG0 %REG1 continuar
+jmp fim
+
+continuar:
+move b %REG0
+add i %REG0
+move %REG0 b
+
+move i %REG0
+inc %REG0
+move %REG0 i
+
+jmp laco
+
+fim:
+move b %REG0
